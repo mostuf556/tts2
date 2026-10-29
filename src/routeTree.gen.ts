@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as DocsRouteImport } from './routes/docs'
+import { Route as EnvRouteImport } from './routes/env'
 import { Route as HealthRouteImport } from './routes/health'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as OpenrouterRouteImport } from './routes/openrouter'
@@ -24,6 +25,7 @@ import { Route as ApiPublicOpenrouterKeysRouteImport } from './routes/api/public
 import { Route as ApiPublicTtsRouteImport } from './routes/api/public/tts'
 import { Route as ApiPublicUsageRouteImport } from './routes/api/public/usage'
 import { Route as ApiReportUsageRouteImport } from './routes/api/report/usage'
+import { Route as ApiUserEnvRouteImport } from './routes/api/user/env'
 import { Route as ApiUserProviderKeysRouteImport } from './routes/api/user/provider-keys'
 import { Route as ApiUserTokenRouteImport } from './routes/api/user/token'
 
@@ -40,6 +42,11 @@ const AccountRoute = AccountRouteImport.update({
 const DocsRoute = DocsRouteImport.update({
   id: '/docs',
   path: '/docs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnvRoute = EnvRouteImport.update({
+  id: '/env',
+  path: '/env',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HealthRoute = HealthRouteImport.update({
@@ -102,6 +109,11 @@ const ApiReportUsageRoute = ApiReportUsageRouteImport.update({
   path: '/api/report/usage',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiUserEnvRoute = ApiUserEnvRouteImport.update({
+  id: '/api/user/env',
+  path: '/api/user/env',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiUserProviderKeysRoute = ApiUserProviderKeysRouteImport.update({
   id: '/api/user/provider-keys',
   path: '/api/user/provider-keys',
@@ -117,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/docs': typeof DocsRoute
+  '/env': typeof EnvRoute
   '/health': typeof HealthRoute
   '/history': typeof HistoryRoute
   '/openrouter': typeof OpenrouterRoute
@@ -129,6 +142,7 @@ export interface FileRoutesByFullPath {
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/api/public/usage': typeof ApiPublicUsageRoute
   '/api/report/usage': typeof ApiReportUsageRoute
+  '/api/user/env': typeof ApiUserEnvRoute
   '/api/user/provider-keys': typeof ApiUserProviderKeysRoute
   '/api/user/token': typeof ApiUserTokenRoute
 }
@@ -136,6 +150,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/docs': typeof DocsRoute
+  '/env': typeof EnvRoute
   '/health': typeof HealthRoute
   '/history': typeof HistoryRoute
   '/openrouter': typeof OpenrouterRoute
@@ -148,6 +163,7 @@ export interface FileRoutesByTo {
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/api/public/usage': typeof ApiPublicUsageRoute
   '/api/report/usage': typeof ApiReportUsageRoute
+  '/api/user/env': typeof ApiUserEnvRoute
   '/api/user/provider-keys': typeof ApiUserProviderKeysRoute
   '/api/user/token': typeof ApiUserTokenRoute
 }
@@ -156,6 +172,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/docs': typeof DocsRoute
+  '/env': typeof EnvRoute
   '/health': typeof HealthRoute
   '/history': typeof HistoryRoute
   '/openrouter': typeof OpenrouterRoute
@@ -168,6 +185,7 @@ export interface FileRoutesById {
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/api/public/usage': typeof ApiPublicUsageRoute
   '/api/report/usage': typeof ApiReportUsageRoute
+  '/api/user/env': typeof ApiUserEnvRoute
   '/api/user/provider-keys': typeof ApiUserProviderKeysRoute
   '/api/user/token': typeof ApiUserTokenRoute
 }
@@ -177,6 +195,7 @@ export interface FileRouteTypes {
     | '/'
     | '/account'
     | '/docs'
+    | '/env'
     | '/health'
     | '/history'
     | '/openrouter'
@@ -189,6 +208,7 @@ export interface FileRouteTypes {
     | '/api/public/tts'
     | '/api/public/usage'
     | '/api/report/usage'
+    | '/api/user/env'
     | '/api/user/provider-keys'
     | '/api/user/token'
   fileRoutesByTo: FileRoutesByTo
@@ -196,6 +216,7 @@ export interface FileRouteTypes {
     | '/'
     | '/account'
     | '/docs'
+    | '/env'
     | '/health'
     | '/history'
     | '/openrouter'
@@ -208,6 +229,7 @@ export interface FileRouteTypes {
     | '/api/public/tts'
     | '/api/public/usage'
     | '/api/report/usage'
+    | '/api/user/env'
     | '/api/user/provider-keys'
     | '/api/user/token'
   id:
@@ -215,6 +237,7 @@ export interface FileRouteTypes {
     | '/'
     | '/account'
     | '/docs'
+    | '/env'
     | '/health'
     | '/history'
     | '/openrouter'
@@ -227,6 +250,7 @@ export interface FileRouteTypes {
     | '/api/public/tts'
     | '/api/public/usage'
     | '/api/report/usage'
+    | '/api/user/env'
     | '/api/user/provider-keys'
     | '/api/user/token'
   fileRoutesById: FileRoutesById
@@ -235,6 +259,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountRoute: typeof AccountRoute
   DocsRoute: typeof DocsRoute
+  EnvRoute: typeof EnvRoute
   HealthRoute: typeof HealthRoute
   HistoryRoute: typeof HistoryRoute
   OpenrouterRoute: typeof OpenrouterRoute
@@ -247,6 +272,7 @@ export interface RootRouteChildren {
   ApiPublicTtsRoute: typeof ApiPublicTtsRoute
   ApiPublicUsageRoute: typeof ApiPublicUsageRoute
   ApiReportUsageRoute: typeof ApiReportUsageRoute
+  ApiUserEnvRoute: typeof ApiUserEnvRoute
   ApiUserProviderKeysRoute: typeof ApiUserProviderKeysRoute
   ApiUserTokenRoute: typeof ApiUserTokenRoute
 }
@@ -272,6 +298,13 @@ declare module '@tanstack/react-router' {
       path: '/docs'
       fullPath: '/docs'
       preLoaderRoute: typeof DocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/env': {
+      id: '/env'
+      path: '/env'
+      fullPath: '/env'
+      preLoaderRoute: typeof EnvRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/health': {
@@ -358,6 +391,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiReportUsageRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/user/env': {
+      id: '/api/user/env'
+      path: '/api/user/env'
+      fullPath: '/api/user/env'
+      preLoaderRoute: typeof ApiUserEnvRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/user/provider-keys': {
       id: '/api/user/provider-keys'
       path: '/api/user/provider-keys'
@@ -379,6 +419,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountRoute: AccountRoute,
   DocsRoute: DocsRoute,
+  EnvRoute: EnvRoute,
   HealthRoute: HealthRoute,
   HistoryRoute: HistoryRoute,
   OpenrouterRoute: OpenrouterRoute,
@@ -391,6 +432,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicTtsRoute: ApiPublicTtsRoute,
   ApiPublicUsageRoute: ApiPublicUsageRoute,
   ApiReportUsageRoute: ApiReportUsageRoute,
+  ApiUserEnvRoute: ApiUserEnvRoute,
   ApiUserProviderKeysRoute: ApiUserProviderKeysRoute,
   ApiUserTokenRoute: ApiUserTokenRoute,
 }
