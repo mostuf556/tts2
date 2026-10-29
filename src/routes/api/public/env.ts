@@ -31,11 +31,13 @@ export const Route = createFileRoute("/api/public/env")({
   server: {
     handlers: {
       GET: async () => {
-        const variables = SECRET_ENV_NAMES.map((name) => ({
-          name,
-          configured: Boolean(process.env[name]),
-        }));
-        return Response.json({ variables }, { headers: NO_STORE });
+        const secrets = SECRET_ENV_NAMES.filter((name) => Boolean(process.env[name])).map(
+          (name) => ({
+            name,
+            maskedValue: "@@@@",
+          }),
+        );
+        return Response.json({ secrets }, { headers: NO_STORE });
       },
     },
   },

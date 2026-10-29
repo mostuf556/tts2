@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
-type SecretStatus = {
+type SecretDisplay = {
   name: string;
-  configured: boolean;
+  maskedValue: string;
 };
 
 export const Route = createFileRoute("/env")({
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/env")({
 });
 
 function EnvironmentStatus() {
-  const [variables, setVariables] = useState<SecretStatus[]>([]);
+  const [secrets, setSecrets] = useState<SecretDisplay[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -29,12 +29,12 @@ function EnvironmentStatus() {
     void fetch("/api/public/env", { cache: "no-store" })
       .then(async (response) => {
         const body = (await response.json()) as {
-          variables?: SecretStatus[];
+          secrets?: SecretDisplay[];
           error?: string;
         };
         if (!response.ok) throw new Error(body.error || "Could not load environment status.");
-        if (!Array.isArray(body.variables)) throw new Error("Invalid environment status response.");
-        if (active) setVariables(body.variables);
+        if (!Array.isArray(body.secrets)) throw new Error("Invalid environment status response.");
+        if (active) setSecrets(body.secrets);
       })
       .catch((reason: unknown) => {
         if (active) setError(reason instanceof Error ? reason.message : String(reason));
@@ -61,9 +61,9 @@ function EnvironmentStatus() {
 
       <h1 className="mt-5 text-2xl font-semibold">Environment status</h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        This page is public. It shows only an allowlist of application secret names and whether
-        each is configured. Secret values and suffixes are never shown; platform and runtime
-        variables are not listed.
+        This page is public and lists configured secrets from an application allowlist. Each value
+        is replaced with the same fixed mask; neither the secret nor its length is shown. Platform
+        and runtime variables are not listed.
       </p>
 
       {loading ? (
@@ -74,21 +74,18 @@ function EnvironmentStatus() {
         </p>
       ) : (
         <ul className="mt-6 divide-y divide-border border-y border-border">
-          {variables.map((variable) => (
+          {secrets.length === 0 && (
+            <li className="py-3 text-sm text-muted-foreground">
+              No allowlisted application secrets are configured.
+            </li>
+          )}
+          {secrets.map((secret) => (
             <li
-              key={variable.name}
+              key={secret.name}
               className="flex flex-wrap items-center justify-between gap-3 py-3 text-sm"
             >
-              <code>{variable.name}</code>
-              <span
-                className={
-                  variable.configured
-                    ? "text-green-700 dark:text-green-400"
-                    : "text-muted-foreground"
-                }
-              >
-                {variable.configured ? "Configured" : "Missing"}
-              </span>
+              <code>{secret.name}</code>
+              <code aria-label="Masked secret value">{secret.maskedValue}</code>
             </li>
           ))}
         </ul>
