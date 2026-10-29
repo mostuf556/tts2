@@ -19,13 +19,13 @@ import { Route as OpenrouterRouteImport } from './routes/openrouter'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as TokensRouteImport } from './routes/tokens'
 import { Route as ApiPublicAccessTokenRouteImport } from './routes/api/public/access-token'
+import { Route as ApiPublicEnvRouteImport } from './routes/api/public/env'
 import { Route as ApiPublicInfoRouteImport } from './routes/api/public/info'
 import { Route as ApiPublicOpenapiDotjsonRouteImport } from './routes/api/public/openapi[.]json'
 import { Route as ApiPublicOpenrouterKeysRouteImport } from './routes/api/public/openrouter-keys'
 import { Route as ApiPublicTtsRouteImport } from './routes/api/public/tts'
 import { Route as ApiPublicUsageRouteImport } from './routes/api/public/usage'
 import { Route as ApiReportUsageRouteImport } from './routes/api/report/usage'
-import { Route as ApiUserEnvRouteImport } from './routes/api/user/env'
 import { Route as ApiUserProviderKeysRouteImport } from './routes/api/user/provider-keys'
 import { Route as ApiUserTokenRouteImport } from './routes/api/user/token'
 
@@ -79,6 +79,11 @@ const ApiPublicAccessTokenRoute = ApiPublicAccessTokenRouteImport.update({
   path: '/api/public/access-token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicEnvRoute = ApiPublicEnvRouteImport.update({
+  id: '/api/public/env',
+  path: '/api/public/env',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicInfoRoute = ApiPublicInfoRouteImport.update({
   id: '/api/public/info',
   path: '/api/public/info',
@@ -109,11 +114,6 @@ const ApiReportUsageRoute = ApiReportUsageRouteImport.update({
   path: '/api/report/usage',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiUserEnvRoute = ApiUserEnvRouteImport.update({
-  id: '/api/user/env',
-  path: '/api/user/env',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiUserProviderKeysRoute = ApiUserProviderKeysRouteImport.update({
   id: '/api/user/provider-keys',
   path: '/api/user/provider-keys',
@@ -136,13 +136,13 @@ export interface FileRoutesByFullPath {
   '/reports': typeof ReportsRoute
   '/tokens': typeof TokensRoute
   '/api/public/access-token': typeof ApiPublicAccessTokenRoute
+  '/api/public/env': typeof ApiPublicEnvRoute
   '/api/public/info': typeof ApiPublicInfoRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/openrouter-keys': typeof ApiPublicOpenrouterKeysRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/api/public/usage': typeof ApiPublicUsageRoute
   '/api/report/usage': typeof ApiReportUsageRoute
-  '/api/user/env': typeof ApiUserEnvRoute
   '/api/user/provider-keys': typeof ApiUserProviderKeysRoute
   '/api/user/token': typeof ApiUserTokenRoute
 }
@@ -157,13 +157,13 @@ export interface FileRoutesByTo {
   '/reports': typeof ReportsRoute
   '/tokens': typeof TokensRoute
   '/api/public/access-token': typeof ApiPublicAccessTokenRoute
+  '/api/public/env': typeof ApiPublicEnvRoute
   '/api/public/info': typeof ApiPublicInfoRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/openrouter-keys': typeof ApiPublicOpenrouterKeysRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/api/public/usage': typeof ApiPublicUsageRoute
   '/api/report/usage': typeof ApiReportUsageRoute
-  '/api/user/env': typeof ApiUserEnvRoute
   '/api/user/provider-keys': typeof ApiUserProviderKeysRoute
   '/api/user/token': typeof ApiUserTokenRoute
 }
@@ -179,13 +179,13 @@ export interface FileRoutesById {
   '/reports': typeof ReportsRoute
   '/tokens': typeof TokensRoute
   '/api/public/access-token': typeof ApiPublicAccessTokenRoute
+  '/api/public/env': typeof ApiPublicEnvRoute
   '/api/public/info': typeof ApiPublicInfoRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/openrouter-keys': typeof ApiPublicOpenrouterKeysRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/api/public/usage': typeof ApiPublicUsageRoute
   '/api/report/usage': typeof ApiReportUsageRoute
-  '/api/user/env': typeof ApiUserEnvRoute
   '/api/user/provider-keys': typeof ApiUserProviderKeysRoute
   '/api/user/token': typeof ApiUserTokenRoute
 }
@@ -202,13 +202,13 @@ export interface FileRouteTypes {
     | '/reports'
     | '/tokens'
     | '/api/public/access-token'
+    | '/api/public/env'
     | '/api/public/info'
     | '/api/public/openapi.json'
     | '/api/public/openrouter-keys'
     | '/api/public/tts'
     | '/api/public/usage'
     | '/api/report/usage'
-    | '/api/user/env'
     | '/api/user/provider-keys'
     | '/api/user/token'
   fileRoutesByTo: FileRoutesByTo
@@ -223,13 +223,13 @@ export interface FileRouteTypes {
     | '/reports'
     | '/tokens'
     | '/api/public/access-token'
+    | '/api/public/env'
     | '/api/public/info'
     | '/api/public/openapi.json'
     | '/api/public/openrouter-keys'
     | '/api/public/tts'
     | '/api/public/usage'
     | '/api/report/usage'
-    | '/api/user/env'
     | '/api/user/provider-keys'
     | '/api/user/token'
   id:
@@ -244,13 +244,13 @@ export interface FileRouteTypes {
     | '/reports'
     | '/tokens'
     | '/api/public/access-token'
+    | '/api/public/env'
     | '/api/public/info'
     | '/api/public/openapi.json'
     | '/api/public/openrouter-keys'
     | '/api/public/tts'
     | '/api/public/usage'
     | '/api/report/usage'
-    | '/api/user/env'
     | '/api/user/provider-keys'
     | '/api/user/token'
   fileRoutesById: FileRoutesById
@@ -266,13 +266,13 @@ export interface RootRouteChildren {
   ReportsRoute: typeof ReportsRoute
   TokensRoute: typeof TokensRoute
   ApiPublicAccessTokenRoute: typeof ApiPublicAccessTokenRoute
+  ApiPublicEnvRoute: typeof ApiPublicEnvRoute
   ApiPublicInfoRoute: typeof ApiPublicInfoRoute
   ApiPublicOpenapiDotjsonRoute: typeof ApiPublicOpenapiDotjsonRoute
   ApiPublicOpenrouterKeysRoute: typeof ApiPublicOpenrouterKeysRoute
   ApiPublicTtsRoute: typeof ApiPublicTtsRoute
   ApiPublicUsageRoute: typeof ApiPublicUsageRoute
   ApiReportUsageRoute: typeof ApiReportUsageRoute
-  ApiUserEnvRoute: typeof ApiUserEnvRoute
   ApiUserProviderKeysRoute: typeof ApiUserProviderKeysRoute
   ApiUserTokenRoute: typeof ApiUserTokenRoute
 }
@@ -349,6 +349,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicAccessTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/env': {
+      id: '/api/public/env'
+      path: '/api/public/env'
+      fullPath: '/api/public/env'
+      preLoaderRoute: typeof ApiPublicEnvRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/info': {
       id: '/api/public/info'
       path: '/api/public/info'
@@ -391,13 +398,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiReportUsageRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/user/env': {
-      id: '/api/user/env'
-      path: '/api/user/env'
-      fullPath: '/api/user/env'
-      preLoaderRoute: typeof ApiUserEnvRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/user/provider-keys': {
       id: '/api/user/provider-keys'
       path: '/api/user/provider-keys'
@@ -426,13 +426,13 @@ const rootRouteChildren: RootRouteChildren = {
   ReportsRoute: ReportsRoute,
   TokensRoute: TokensRoute,
   ApiPublicAccessTokenRoute: ApiPublicAccessTokenRoute,
+  ApiPublicEnvRoute: ApiPublicEnvRoute,
   ApiPublicInfoRoute: ApiPublicInfoRoute,
   ApiPublicOpenapiDotjsonRoute: ApiPublicOpenapiDotjsonRoute,
   ApiPublicOpenrouterKeysRoute: ApiPublicOpenrouterKeysRoute,
   ApiPublicTtsRoute: ApiPublicTtsRoute,
   ApiPublicUsageRoute: ApiPublicUsageRoute,
   ApiReportUsageRoute: ApiReportUsageRoute,
-  ApiUserEnvRoute: ApiUserEnvRoute,
   ApiUserProviderKeysRoute: ApiUserProviderKeysRoute,
   ApiUserTokenRoute: ApiUserTokenRoute,
 }
